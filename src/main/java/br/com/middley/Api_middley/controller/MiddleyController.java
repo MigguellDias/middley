@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -23,23 +22,7 @@ public class MiddleyController {
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
-        Optional<Customer> customer = middleyService.
-                getCustomerByEmail(loginRequest.getEmail());
-        if (customer.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    "Email não econtrado"
-            );
-        }
-
-        Customer customer1 = customer.get();
-
-        if(!customer1.getPassword().equals(loginRequest.getPassword())){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    "Senha incorreta");
-        }
-
-        customer1.setPassword(null);
-        return ResponseEntity.ok(customer1);
+        return middleyService.getCustomerByEmail(loginRequest);
     }
 
     @PostMapping("/signup")
